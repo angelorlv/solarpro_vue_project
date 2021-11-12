@@ -1,15 +1,13 @@
 <template>
 	<div id="app" class="flex justify-center items-center bg-gray-200 h-screen w-screen">
-		<div class="p-5 rounded bg-blue-300 bg-opacity-20 flex flex-col">
-			<span class="text-4xl text-gray-700">SolarPro en cours de construction</span>
-			<span class="">  {{ d }} </span>
+		<div class="w-full">
+			<login></login>
 		</div>
 	</div>
 </template>
 
 <script>
-
-
+import login from './components/login.vue'
 export default {
 	data(){
 		return{
@@ -18,18 +16,26 @@ export default {
 	},
 	name: 'App',
 	components: {
-
+		login
 	},
 	methods:{
 		test_recup_data(){
-			let self = this
-			$.get('/api/test',function(data){
-				self.d = data
+			this.$http.get('p/test').then(res =>{
+				console.log(res)
+			},res =>{
+
+			})
+		},
+		check_connect(){
+			this.$http.get('p/check_connect').then(res =>{
+				console.log(res)
+			},res =>{
+
 			})
 		}
 	},
 	created(){
-		this.test_recup_data()
+		this.check_connect()
 	}
 }
 </script>

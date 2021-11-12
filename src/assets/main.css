@@ -1,10 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Dongle&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body{
-    font-family: 'Dongle', sans-serif;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.input{
+    @apply border p-2 rounded focus:outline-none focus:border-blue-300;
+}
+
+.bt{
+    @apply p-2 font-bold focus:outline-none hover:bg-blue-400 bg-blue-300;
 }
 

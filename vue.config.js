@@ -6,5 +6,11 @@ module.exports = {
         target: "http://localhost:4000/"
       }
     }
+  },
+  pages:{
+    index:{
+      entry:'src/main.js',
+      title:'Solarpro'
+    }
   }
 }
