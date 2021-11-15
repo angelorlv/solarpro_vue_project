@@ -1,22 +1,34 @@
 <template>
-	<div id="app" class="flex justify-center items-center bg-gray-200 h-screen w-screen">
-		<div class="w-full">
-			<login></login>
-		</div>
+	<div id="app" class="flex flex-col justify-center items-center bg-gray-200 h-screen w-screen">
+		<transition name="fade" mode="out-in">
+			<div v-if="data_loaded" class="">
+				<div class="w-screen h-screen max-h-screen" v-if="$store.state.status_connect">
+					<contents></contents>
+				</div>
+				<div v-else class="w-screen">
+					<login></login>
+				</div>
+			</div>
+		</transition>
 	</div>
 </template>
 
 <script>
+
+import contents from './components/contents.vue'
+
 import login from './components/login.vue'
 export default {
 	data(){
 		return{
-			d:''
+			d:'',
+			data_loaded:false
 		}
 	},
 	name: 'App',
 	components: {
-		login
+		login,
+		contents
 	},
 	methods:{
 		test_recup_data(){
@@ -27,8 +39,15 @@ export default {
 			})
 		},
 		check_connect(){
+			let self  = this
 			this.$http.get('p/check_connect').then(res =>{
-				console.log(res)
+				if(res.body.status){
+					self.$store.commit('setUser',res.body.user)
+					
+				}else{
+
+				}
+				self.data_loaded = true
 			},res =>{
 
 			})
@@ -40,5 +59,13 @@ export default {
 }
 </script>
 
-<style>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(30px);
+}
 </style>

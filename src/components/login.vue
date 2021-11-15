@@ -1,17 +1,22 @@
 <template>
     <div class="flex w-full ">
-        <div @click="change_state('about')" class="flex flex-col justify-center items-center h-screen pl-5 duration-300" 
-        :class="{'w-3/4':(state=='about'),'w-1/4':(state == 'login')}">
+        <div @click="change_state('about')" class="flex flex-col justify-center bg-green-400 items-center h-screen pl-5 duration-300" 
+        :class="{'w-full':(state=='about'),'hidden':(state == 'login')}">
             <span class="font-bold text-gray-700 text-7xl">Solarpro</span>
-            <span class="font-bold text-gray-500 border-b pl-5 text-5xl">Admin</span>
+            <span class="font-bold text-gray-600 pl-5 text-5xl">Admin</span>
+
+            <button @click="change_state('login')" class="bt rounded-full animate-bounce mt-5" v-if="state == 'about'">Connexion</button>
         </div>
-        <div @click="change_state('login')" :class="{'w-3/4':(state=='login'),'w-1/4 opacity-50':(state == 'about')}" 
+        <div @click="change_state('login')" :class="{'w-full':(state=='login'),'hidden opacity-50':(state == 'about')}" 
         class="duration-300 h-screen w-1/2 flex flex-col justify-center items-center bg-gray-100 border-l border-blue-200">
             <form class="flex flex-col justify-center items-center" @submit.prevent="connect" action="/" method="post">
-                <div class="duration-300 h-2" :class="{'h-14':error_login.isOn}">
+                <div class="border-b pb-3 mb-2 ">
+                    <span class="text-3xl"> Solarpro </span> <span class="text-xl">Admin</span>
+                </div>
+                <div class="duration-300 h-2 z-0" :class="{'h-14':msg_info.active}">
                     <transition name="fade">
-                        <div  v-if="error_login.isOn" class=" p-2 rounded border bg-red-500">
-                            <span> {{ error_login.message }} </span>
+                        <div  v-if="msg_info.active" class=" p-2 rounded border" :class="{'bg-red-500':!msg_info.success,'bg-green-500':msg_info.success}">
+                            <span> {{ msg_info.message }} </span>
                         </div>
                     </transition>
                 </div>
@@ -42,8 +47,13 @@ export default {
                 isOn:false,
                 message:''
             },
+            msg_info:{
+                active:false,
+                success:false,
+                message:''
+            },
             id_time_out:-1,
-            state:'about' // 2 états possibles about/login
+            state:'login' // 2 états possibles about/login
         }
     },
 
@@ -52,25 +62,30 @@ export default {
             let self = this
            this.$http.post('p/auth',this.user).then(res =>{
                if(res.body.status){
-
+                   self.show_msg_info(res.body.message,true)
+                   self.$store.commit('setUser',res.body.user)
+                   setTimeout(() => {
+                       
+                   }, 1000);
                }else{
                    document.querySelector('#u_login').focus()
-                   self.set_error_login(res.body.message)
+                   self.show_msg_info(res.body.message)
                }
            },res=>{
 
            })
         },
-        set_error_login(message){
-            this.error_login.isOn = true
-            this.error_login.message = message
+        show_msg_info(message,success = false){
+            this.msg_info.active = true
+            this.msg_info.message = message
+            this.msg_info.success = success
             let self = this
             if(this.id_time_out != -1 ){
                 clearTimeout(this.id_time_out)
             }
             this.id_time_out = setTimeout(() => {
-                this.error_login.isOn = false
-                this.error_login.message = ''
+                self.msg_info.active = false
+                self.msg_info.message = ''
 
                 self.id_time_out = -1
             }, 2000);

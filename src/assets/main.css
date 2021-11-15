@@ -8,10 +8,32 @@ body{
 }
 
 .input{
-    @apply border p-2 rounded focus:outline-none focus:border-blue-300;
+    @apply border p-2 rounded focus:outline-none focus:border-blue-500 border-blue-300;
+    @apply bg-gray-100 bg-opacity-40;
 }
 
 .bt{
-    @apply p-2 font-bold focus:outline-none hover:bg-blue-400 bg-blue-300;
+    @apply p-2 font-bold focus:outline-none text-gray-700 hover:bg-blue-400 bg-blue-200;
 }
+
+.bt-w{
+    @apply border shadow-sm duration-300 hover:shadow-lg p-2 font-bold focus:outline-none text-gray-700 hover:bg-gray-200 bg-gray-100;
+}
+
+.menu_sidebar{
+    @apply w-full flex items-center font-bold text-gray-600 p-2 my-2 duration-300 hover:bg-gray-400 hover:bg-opacity-20 rounded-full;
+    @apply flex items-center;
+}
+.router-link-exact-active{
+    @apply text-gray-800 bg-green-400 hover:bg-green-400 duration-300;
+}
+
+table th,table td{
+    @apply border-b p-2;
+}
+
+.bt-icon{
+    @apply w-10 h-10 flex justify-center items-center hover:bg-gray-300 border hover:border-gray-600 text-gray-700 bg-gray-200 duration-300 rounded-full;
+}
+
 
