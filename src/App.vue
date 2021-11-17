@@ -40,7 +40,7 @@ export default {
 		},
 		check_connect(){
 			let self  = this
-			this.$http.get('p/check_connect').then(res =>{
+			this.$http.get('a/check_connect').then(res =>{
 				if(res.body.status){
 					self.$store.commit('setUser',res.body.user)
 					
