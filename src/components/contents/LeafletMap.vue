@@ -52,12 +52,12 @@ export default {
                     fillColor: '#f03',
                     fillOpacity: 0.5,
                     radius: self.radius
-                }).addTo(this.features_circle);
-                mymap.setView(e.geocode.center,16);
+                }).addTo(this.features_circle)
+                mymap.setView(e.geocode.center,16)
                 self.$emit('position',e.geocode.center)
                 //Nommage
 
-                let [t,r,...rest] = e.geocode.name.split(',');
+                let [t,r,...rest] = e.geocode.name.split(',')
                 this.location = t+','+r
                 this.$emit('place_name',this.location)
             })
