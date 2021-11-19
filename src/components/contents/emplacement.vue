@@ -11,7 +11,7 @@
             </div>
             <!-- list -->
             <div class="">
-                <ctable @on_delete="delete_place" v-if="places.list.length != 0" :_head="places.head" :_list="places.list" _key="id" ></ctable>
+                <ctable @on_delete="delete_place" @on_view="view_place" v-if="places.list.length != 0" :_head="places.head" :_list="places.list" _key="id" ></ctable>
                 <div class="w-full flex justify-center items-center" v-else>
                     <span class="text-xl text-gray-600"> Aucun emplacement à afficher. </span>
                 </div>
@@ -30,9 +30,9 @@
                 <div class="flex w-full">
                     <div class="flex-grow" style="width:100%">
                         <!-- <MapBox @position="position" @place_name="place_name" /> -->
-                        <LeafletMap :radius="places.model.radius" @position="position" @place_name="place_name" />
+                        <LeafletMap :places="places.list" :radius="places.model.radius" @position="position" @place_name="place_name" />
                     </div>
-                    <div class="flex flex-col justify-center items-center ">
+                    <div class="flex flex-col justify-center items-center " key="">
                         <div class="duration-300 h-0 flex justify-center items-center" :class="(info.isOn)?'h-14':'h-0'">
                             <div class="rounded p-2 " :class="(info.success)?'bg-green-400':'bg-red-400'" v-if="info.isOn">
                                 <span> {{ info.message }} </span>
@@ -71,11 +71,11 @@
 <script>
 
 import ctable from '@/utils/ctable.vue'
-import MapBox from "./Mapbox.vue";
-import LeafletMap from './LeafletMap.vue'
+import LeafletMap from './emplacement/LeafletMap.vue'
+import { latLng } from 'leaflet'
 
 export default {
-    components:{ctable,MapBox,LeafletMap},
+    components:{ctable,LeafletMap},
     data(){
         return{
             places:{
@@ -145,6 +145,12 @@ export default {
                         self.show_add_place(false)
                     })
                     self.recup_place_list()
+
+                    self.places.model = {
+                        latLng:'',
+                        radius:50,
+                        label:''
+                    }
                     
                 }else{
                     self.show_info(res.body.status,res.body.message)
@@ -176,6 +182,10 @@ export default {
 
                 })
             }
+        },
+        view_place(i){
+            let id_place = this.places.list[i].id
+            this.$router.push({name:'vue_emplacement',params:{id:id_place}})
         }
     },
     created(){
