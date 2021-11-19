@@ -10,10 +10,11 @@ body{
 .input{
     @apply border p-2 rounded focus:outline-none focus:border-blue-500 border-blue-300;
     @apply bg-gray-100 bg-opacity-40;
+    width: 250px;
 }
 
 .bt{
-    @apply p-2 font-bold focus:outline-none text-gray-700 hover:bg-blue-400 bg-blue-200;
+    @apply p-2 font-bold focus:outline-none text-gray-700 duration-300 hover:bg-blue-400 bg-blue-200;
 }
 
 .bt-w{

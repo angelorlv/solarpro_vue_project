@@ -1,20 +1,15 @@
 <template>
     <div class="p-2">
         <!-- menu création -->
-        <div class="mb-5">
-            <div class="flex">
-                <input type="text" class="input flex-grow" :style="{minWidth:250+'px'}" placeholder="Rechercher un utilisateur ..." >
-                <button @click="show_add_user(true)" class="bt-w flex items-center rounded  mx-2 justify-center"> 
-                    <span class="material-icons"> add </span>
-                    <span> Ajouter </span>
-                </button>
-            </div>
-        </div>
 
         <!-- Menu liste utilisateur -->
         <div class="">
-            <div class="border-b mb-3">
-                <span class="text-xl text-gray-700"> Liste des utilisateurs - </span>
+            <div class="border-b mb-3 flex items-center pb-2">
+                <span class="text-xl text-gray-700 flex-grow "> Liste des utilisateurs - </span>
+                <button @click="show_add_user(true)" class="ml-2 bt rounded-full flex justify-center items-center"> 
+                    <span class="material-icons"> add </span>
+                    <span> Ajouter </span>
+                </button>
             </div>
             <!-- list -->
             <div class="">
