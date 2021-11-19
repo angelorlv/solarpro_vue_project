@@ -11,7 +11,7 @@
             </div>
             <!-- list -->
             <div class="">
-                <ctable v-if="places.list.length != 0" :_head="places.head" :_list="places.list" _key="id" ></ctable>
+                <ctable @on_delete="delete_place" v-if="places.list.length != 0" :_head="places.head" :_list="places.list" _key="id" ></ctable>
                 <div class="w-full flex justify-center items-center" v-else>
                     <span class="text-xl text-gray-600"> Aucun emplacement à afficher. </span>
                 </div>
@@ -158,6 +158,24 @@ export default {
         },
         place_name(current_place_name){
             this.places.model.label = current_place_name
+        },
+
+        //------------------
+        delete_place(i){
+            let self = this
+            let c = confirm("Voulez vous vraiment supprimer l'emplacement +"+this.places.list[i].label+" !!?")
+            if(c){
+                this.$http.delete('a/places/'+this.places.list[i].id).then(res =>{
+                    if(res.body.status){
+                        alert(res.body.message)
+                        self.recup_place_list()
+                    }else{
+                        alert(res.body.message)
+                    }
+                },err =>{
+
+                })
+            }
         }
     },
     created(){
