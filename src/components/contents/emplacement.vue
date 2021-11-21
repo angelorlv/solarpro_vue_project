@@ -147,7 +147,7 @@ export default {
                     self.recup_place_list()
 
                     self.places.model = {
-                        latLng:'',
+                        latlng:'',
                         radius:50,
                         label:''
                     }
