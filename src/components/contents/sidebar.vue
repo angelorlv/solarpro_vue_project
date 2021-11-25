@@ -25,6 +25,16 @@
             </router-link>
 
             <router-link class="menu_sidebar" 
+            :to="{name:'stat'}">
+                <span class="material-icons">
+                    analytics
+                </span>
+                <span class="ml-5">
+                    Statistiques
+                </span>
+            </router-link>
+
+            <router-link class="menu_sidebar" 
             :to="{name:'user'}">
                 <span class="material-icons">
                     face
