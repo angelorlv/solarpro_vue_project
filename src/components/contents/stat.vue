@@ -5,8 +5,9 @@
         </div>
         <div class="" v-if="list_length > 0">
             <div class="">
-                <div class="border-b mb-2 p-2 text-xl">
-                    <span> Statistique du <span class="font-bold">{{ date_lettre }}</span> </span>
+                <div class="border-b justify-center items-center mb-2 p-2  flex  text-xl">
+                    <span class="flex-grow"> Statistique du <span class="font-bold">{{ date_lettre }}</span> </span>
+                    <input type="date" v-model="date_select" class="text-md input"/>
                 </div>
                 <div class="flex rounded items-center border m-2 duration-300 hover:bg-gray-300 hover:bg-opacity-30" v-for="v,i in places_stat" :key="i">
                     <div class="p-2 h-full bg-gray-200">
@@ -18,7 +19,8 @@
                         </span>
                     </div>
                     <div class="mx-2 flex flex-col">
-                        <span class="font-bold">{{v.label}}</span>
+                        <router-link :to="{name:'vue_emplacement',params:{id:i}}" class="font-bold">{{v.label}}</router-link>
+                        
                         <div class="flex" v-if="v.visited">
                             <span class="px-2" > Par : {{ v.user }} </span>
                             <div class="border-l px-2"> A partir de : 
@@ -42,11 +44,19 @@
 
 <script>
 export default {
+    watch:{
+        date_select(n){
+            let d = n.split('-')
+            this.date_lettre = d[2]+" "+(this.mois[parseInt(d[1])-1])+" "+d[0]
+            this.recup_stat_par_jour()
+        }
+    },
     data(){
         return{
             places_stat:{},
             list_length:0,
             date_now:"",
+            date_select:new Date().toISOString().slice(0, 19).replace('T', ' ').split(' ')[0],
             date_lettre:"",
             mois:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
         }
@@ -55,7 +65,7 @@ export default {
         recup_stat_par_jour(){
             let self = this
 
-            this.$http.get('a/places/stat').then(res =>{
+            this.$http.get('a/places/stat?date_check='+this.date_select).then(res =>{
                 if(res.body.status){
                     self.list_length = res.body.places_stat.length
                     self.format_par_jour(res.body.places_stat)
@@ -67,6 +77,7 @@ export default {
             })
         },
         format_par_jour(p){
+            this.places_stat = {}
             
             for(let i=0;i<p.length;i++){
                 if(!this.places_stat[p[i].place_id]){
