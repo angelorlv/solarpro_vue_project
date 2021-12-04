@@ -9,108 +9,89 @@
                     <span> Ajouter </span>
                 </button>
             </div>
+            <div class="mb-2 sticky top-0 flex items-end  rounded bg-gray-100 border-b shadow-lg p-2">
+                <div class=" p-2 border">
+                    <div class="flex ">
+                        <span class="text-sm">Recherche ... </span>
+                    </div>
+                    <div class="flex mt-2">
+                        <input type="text" placeholder="Rechercher une place ..." class="input mr-" v-model.trim="search">
+                        <cSelect :datas="search_cat" @selected="set_select_search_cat" label="label"></cSelect>
+                    </div>
+                </div>
+                <div class="flex flex-col p-2 mx-2 h-full border rounded">
+                    <span class="text-sm">Trier par :</span>
+                    <cSelect :datas="tri_select" label="label" @selected="set_select_tri"></cSelect>
+                </div>
+            </div>
             <!-- list -->
             <div class="">
-                <ctable @on_delete="delete_place" @on_view="view_place" v-if="places.list.length != 0" :_head="places.head" :_list="places.list" _key="id" ></ctable>
+                <div class="" v-if="places.list.length != 0">
+                    <ctable @on_delete="delete_place" @on_view="view_place" :search="search" :col_search="search_cat_selected.code" :_head="places.head" :_list="places.list" _key="id" ></ctable>
+                </div>
                 <div class="w-full flex justify-center items-center" v-else>
                     <span class="text-xl text-gray-600"> Aucun emplacement à afficher. </span>
                 </div>
             </div>
         </div>
 
-
-        <!-- Boîtes de diaogue -->
-        <div v-if="on_add_place"  class="fixed flex justify-center items-center top-0 left-0 w-screen h-screen bg-gray-800 bg-opacity-80">
-            <div :style="{minWidth:400+'px',width:900+'px',height:500+'px'}" class="bg-gray-100 border flex flex-col border-green-400 rounded shadow-lg">
-                <div class="border-b p-2 bg-green-400 flex">
-                    <span class="flex-grow text-2xl text-gray-700 font-bold">Ajout d'un emplacement</span>
-                    <button @click="show_add_place(false)" class="w-8 h-8 rounded-full flex justify-center items-center text-gray-600
-                     hover:text-gray-800 duration-300"> <span class="material-icons">clear</span> </button>
-                </div>
-                <div class="flex w-full">
-                    <div class="flex-grow" style="width:100%">
-                        <!-- <MapBox @position="position" @place_name="place_name" /> -->
-                        <LeafletMap :places="places.list" :radius="places.model.radius" @position="position" @place_name="place_name" />
-                    </div>
-                    <div class="flex flex-col justify-center items-center " key="">
-                        <div class="duration-300 h-0 flex justify-center items-center" :class="(info.isOn)?'h-14':'h-0'">
-                            <div class="rounded p-2 " :class="(info.success)?'bg-green-400':'bg-red-400'" v-if="info.isOn">
-                                <span> {{ info.message }} </span>
-                            </div>
-                        </div>
-                        <form @submit.prevent="post_add_place" class="flex flex-col " action="/" method="post">
-                            <div class="mt-2 p-2 flex flex-col justify-end">
-                                <div class="flex flex-col pr-2">
-                                    <div class="mt-1 flex flex-col">
-                                        <span class="text-sm text-gray-600"> Latitude et Longitude ... </span>
-                                        <input type="text" class="input" placeholder="@exemple  -14.545454545, 48.15465445646546 ..." v-model.trim="places.model.latlng">
-                                    </div>
-                                    <div class="mt-1 flex flex-col">
-                                        <span class="text-sm text-gray-600"> Rayon (en mètre) ... </span>
-                                        <input type="number" class="input" placeholder="@exemple 50 ..." v-model.trim="places.model.radius">
-                                    </div>
-                                    <div class="mt-1 flex flex-col">
-                                        <span class="text-sm text-gray-600"> Libellé ... </span>
-                                        <input type="text" class="input" placeholder="@exemple Analakely ..." v-model.trim="places.model.label">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-2 border-t flex justify-end">
-                                <button class="bt-w rounded"> Créer </button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                </div>
-                
-            </div>
-        </div>
+        <!-- Boîte de dalogue ajout Place -->
+        <addPlace :show="on_add_place" @close="show_add_place(false)" @success_add="recup_place_list" :places_list="places.list"></addPlace>
     </div>
 </template>
 
 <script>
 
 import ctable from '@/utils/ctable.vue'
-import LeafletMap from './emplacement/LeafletMap.vue'
 import { latLng } from 'leaflet'
 
+import cSelect from '@/utils/c-select.vue'
+
+import addPlace from './emplacement/add_place.vue'
+
 export default {
-    components:{ctable,LeafletMap},
+    components:{ctable,addPlace,cSelect},
     data(){
         return{
             places:{
                 head:[
-                    {code:'lat',label:'Latitude'},
-                    {code:'lng',label:'Longitude'},
-                    {code:'radius',label:'Rayon (en mètre)'},
-                    {code:'label',label:'Libellé'},
+                    {code:'annonceur_name',label:'Annonceur'},
+                    {code:'regisseur_name',label:'Régisseur'},
+                    {code:'label',label:'Lieu'},
+                    {code:'nombre_light',label:'Nb. Limières'},
+                    {code:'dimension_panneau',label:'Dim. Panneau'},
+                    {code:'date_debut',label:'Date Debut'},
                 ],
                 list:[],
-                model:{
-                    latlng:'',
-                    radius:50,
-                    label:''
-                }
             },
-            info:{
-                success:'',
-                message:'',
-                isOn:false,
-                idTimeout:-1
-            },
+            tri_select:[
+                {label:"Lieu",code:"place.label"},
+                {label:"Regisseur",code:"regisseur_name"},
+                {label:"Annonceur",code:"annonceur_name"},
+            ],
+            tri_selected:{},
             on_add_place:false,
-            position_on_carte:[],
-            current_position:[],
-            current_place_name:''
+            search:'',
+            search_cat:[
+                {label:"Emplacement",code:"label"},
+                {label:"Régisseur",code:"regisseur_name"},
+                {label:"Annonceur",code:"annonceur_name"},
+            ],
+            search_cat_selected:{},
+            
         }
     },
     methods:{
         show_add_place(v){
             this.on_add_place = v
         },
+        set_select_tri(i){
+            this.tri_selected = this.tri_select[i]
+            this.recup_place_list()
+        },
         recup_place_list(){
             let self = this
-            this.$http.get('a/places').then(res=>{
+            this.$http.get('a/places/opt/'+this.tri_selected.code).then(res=>{
                 if(res.body.status){
                     self.places.list = res.body.places
                 }else{
@@ -120,52 +101,6 @@ export default {
                 
             })
         },
-        show_info(success,message,cb){
-            this.info.message = message
-            this.info.isOn = true
-            this.info.success = success
-
-            if(this.info.idTimeout != -1){
-                clearTimeout(this.info.idTimeout)
-            }
-
-            this.info.idTimeout = setTimeout(() => {
-                this.info.isOn = false
-
-                if(cb != undefined){
-                    cb()
-                }
-            }, 2000);
-        },
-        post_add_place(){
-            let self = this
-            this.$http.post('a/places',this.places.model).then(res=>{
-                if(res.body.status){
-                    self.show_info(res.body.status,res.body.message,()=>{
-                        self.show_add_place(false)
-                    })
-                    self.recup_place_list()
-
-                    self.places.model = {
-                        latlng:'',
-                        radius:50,
-                        label:''
-                    }
-                    
-                }else{
-                    self.show_info(res.body.status,res.body.message)
-                }
-            }, err =>{
-
-            })
-        },
-        position(latlng){
-            this.places.model.latlng = latlng.lat+','+latlng.lng
-        },
-        place_name(current_place_name){
-            this.places.model.label = current_place_name
-        },
-
         //------------------
         delete_place(i){
             let self = this
@@ -186,10 +121,14 @@ export default {
         view_place(i){
             let id_place = this.places.list[i].id
             this.$router.push({name:'vue_emplacement',params:{id:id_place}})
+        },
+
+        set_select_search_cat(i){
+            this.search_cat_selected = this.search_cat[i]
         }
     },
     created(){
-        this.recup_place_list()
+
     }
 }
 </script>

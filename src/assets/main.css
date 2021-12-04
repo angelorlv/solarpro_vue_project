@@ -8,13 +8,17 @@ body{
 }
 
 .input{
-    @apply border p-1 rounded focus:outline-none focus:border-blue-500 border-blue-300;
+    @apply border p-1 rounded focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 border-blue-300;
     @apply bg-gray-100 bg-opacity-40;
     width: 250px;
 }
 
 .bt{
     @apply p-2 font-bold focus:outline-none text-gray-700 duration-300 hover:bg-blue-400 bg-blue-200;
+}
+bt-disabled{
+  @apply w-10 h-10 bg-gray-400 hover:bg-gray-400 text-gray-700 border-dashed border-gray-700;
+
 }
 
 .bt-w{

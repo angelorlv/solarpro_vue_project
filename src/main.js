@@ -17,16 +17,6 @@ window.$ = jquery
 //CSS
 import "./assets/main.css"
 
-//Google maps
-import * as VueGoogleMaps from "vue2-google-maps" // Import package
-
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: "AIzaSyBUADJkgRWIVtbeUlZlJ2oqEX_SU9xaQo4",
-    libraries: "places"
-  }
-});
-
 
 //-Config
 Vue.config.productionTip = false

@@ -14,6 +14,9 @@ const store = new Vuex.Store({
         setUser:(state,u)=>{
             state.user = u
             state.status_connect = true
+        },
+        deconnect:(state)=>{
+            state.status_connect = false
         }
     }
 })

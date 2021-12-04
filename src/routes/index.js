@@ -22,6 +22,11 @@ const routes = [
         name:'emplacement'
     },
     {
+        path:'/society',
+        component:require('@/components/contents/society.vue').default,
+        name:'society'
+    },
+    {
         path:'/emplacement/:id',
         component:require('@/components/contents/emplacement/place_vue.vue').default,
         name:'vue_emplacement'

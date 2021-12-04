@@ -45,7 +45,7 @@ export default {
 					self.$store.commit('setUser',res.body.user)
 					
 				}else{
-
+					self.$store.commit('deconnect')
 				}
 				self.data_loaded = true
 			},res =>{
