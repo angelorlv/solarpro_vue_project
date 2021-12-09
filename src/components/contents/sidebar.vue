@@ -15,7 +15,7 @@
                 </button>
             </div>
         </div>
-        <div class="p-2">
+        <div class="p-2 text-sm">
             <router-link class="menu_sidebar" 
             :to="{name:'home'}">
                 <span class="material-icons">

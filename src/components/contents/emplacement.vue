@@ -25,7 +25,7 @@
                 </div>
             </div>
             <!-- list -->
-            <div class="">
+            <div class="text-sm">
                 <div class="" v-if="places.list.length != 0">
                     <ctable @on_delete="delete_place" @on_view="view_place" :search="search" :col_search="search_cat_selected.code" :_head="places.head" :_list="places.list" _key="id" ></ctable>
                 </div>
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Boîte de dalogue ajout Place -->
-        <addPlace :show="on_add_place" @close="show_add_place(false)" @success_add="recup_place_list" :places_list="places.list"></addPlace>
+        <addPlace key="ajout_emplacement" :show="on_add_place" @close="show_add_place(false)" @success_add="recup_place_list" :places_list="places.list"></addPlace>
     </div>
 </template>
 

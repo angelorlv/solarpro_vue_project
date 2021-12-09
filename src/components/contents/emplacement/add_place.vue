@@ -193,8 +193,8 @@ export default {
                         dimension_panneau:'',
                         date_debut:'',
                         nombre_light:1,
-                        image_jour:"",
-                        image_nuit:""
+                        photo_jour_id:null,
+                        photo_nuit_id:null
                     }
                     
                 }else{

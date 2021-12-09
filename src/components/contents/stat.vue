@@ -1,62 +1,79 @@
 <template>
-    <div>
-        
-        <div class="">
-            <div class="border-b justify-center items-center mb-2 p-2  flex  text-xl">
-                <span class="flex-grow"> Statistique du <span class="font-bold">{{ date_lettre+""+((indication_state_date !="")?(", "+indication_state_date):"" )}}</span> </span>
-                <input type="date" v-model="date_select" class="text-md input"/>
-            </div>
-            <div class="m-2 flex shadow-lg p-2 sticky top-0 rounded-lg border bg-gray-100">
-                <!-- <div class="mx-2 flex flex-col">
-                    <span class="text-sm"> Contrôle </span>
-                    <cSelect :datas="cat_select" label="label" @selected="set_select_cat"></cSelect>
-                </div> -->
-                <div class="mx-2 flex flex-col">
-                    <span class="text-sm"> Type </span>
-                    <cSelect :datas="type_select" label="label" @selected="set_select_type"></cSelect>
-                </div>
-            </div>
-        </div>
-        <div class="p-5 flex justify-center items-center" v-if="list_length == 0">
-            <span class="">Aucune statistique à Afficher</span>
-        </div>
-        <div class="" v-if="list_length > 0">
+    <div class="flex">
+        <div class="max-h-screen overflow-auto flex-grow">
             <div class="">
-                <div class="flex rounded items-center border m-2 duration-300 hover:bg-gray-300 hover:bg-opacity-30" v-for="v,i in places_stat" :key="i">
-                    <div class="p-2 h-full bg-gray-200">
-                        <span class="flex justify-center items-center text-green-500 material-icons" v-if="v.visited">
-                            check_circle
-                        </span>
-                        <span class="flex justify-center items-center text-red-500 material-icons" v-else>
-                            unpublished
-                        </span>
-                    </div>
+                <div class="border-b justify-center items-center mb-2 p-2  flex  text-xl">
+                    <span class="flex-grow"> Statistique du <span class="font-bold">{{ date_lettre+""+((indication_state_date !="")?(", "+indication_state_date):"" )}}</span> </span>
+                    <input type="date" v-model="date_select" class="text-md input"/>
+                </div>
+                <div class="m-2 flex shadow-lg p-2 sticky top-0 rounded-lg border bg-gray-100">
+                    <!-- <div class="mx-2 flex flex-col">
+                        <span class="text-sm"> Contrôle </span>
+                        <cSelect :datas="cat_select" label="label" @selected="set_select_cat"></cSelect>
+                    </div> -->
                     <div class="mx-2 flex flex-col">
-                        <div class="flex">
-                            <router-link :to="{name:'vue_emplacement',params:{id:i}}" class="font-bold">{{v.place_label}}</router-link>
-                            <div class="mx-2">
-                                <span class="border-r px-2"> {{ v.regisseur_name }} </span> <span class="px-2 border-r"> {{ v.annonceur_name }} </span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex" v-if="v.visited">
-                            <span class="px-2" > Par : {{ v.login_user }} </span>
-                            <div class="border-l px-2"> A partir de : 
-                                <span class="font-bold">{{ (parseInt(v.time.enter[0])+3)+"H."+v.time.enter[1]+"M."+v.time.enter[2] }} </span>
-                                à 
-                                <span class="font-bold"> {{ (parseInt(v.time.exit[0])+3)+"H."+v.time.exit[1]+"M."+v.time.exit[2] }}  </span>
-                            </div>
-                            <div class="">
-                                Durée Contrôle : <span class="font-bold"> {{ (v.duree>=60)?(v.duree%60):v.duree }} </span> <span> {{ (v.duree>=60)?'Minutes':'Secondes' }} </span>
-                            </div>
-                        </div>
+                        <span class="text-sm"> Type </span>
+                        <cSelect :datas="type_select" label="label" @selected="set_select_type"></cSelect>
                     </div>
-                    <div class="border-l">
+                </div>
+            </div>
+            <div class="p-5 flex justify-center items-center" v-if="list_length == 0">
+                <span class="">Aucune statistique à Afficher</span>
+            </div>
+            <div class="" v-if="list_length > 0">
+                <div class="">
+                    <div class="flex rounded items-center border m-2 duration-300 hover:bg-gray-300 hover:bg-opacity-30" v-for="v,i in places_stat" :key="i">
+                        <div class="p-2 h-full bg-gray-200">
+                            <span class="flex justify-center items-center text-green-500 material-icons" v-if="v.visited">
+                                check_circle
+                            </span>
+                            <span class="flex justify-center items-center text-red-500 material-icons" v-else>
+                                unpublished
+                            </span>
+                        </div>
+                        <div class="mx-2 flex flex-col">
+                            <div class="flex">
+                                <router-link :to="{name:'vue_emplacement',params:{id:i}}" class="font-bold">{{v.place_label}}</router-link>
+                                <div class="mx-2">
+                                    <span class="border-r px-2"> {{ v.regisseur_name }} </span> <span class="px-2 border-r"> {{ v.annonceur_name }} </span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex" v-if="v.visited">
+                                <span class="px-2" > Par : {{ v.login_user }} </span>
+                                <div class="border-l px-2"> A partir de : 
+                                    <span class="font-bold">{{ (parseInt(v.time.enter[0])+3)+"H."+v.time.enter[1]+"M."+v.time.enter[2] }} </span>
+                                    à 
+                                    <span class="font-bold"> {{ (parseInt(v.time.exit[0])+3)+"H."+v.time.exit[1]+"M."+v.time.exit[2] }}  </span>
+                                </div>
+                                <div class="">
+                                    Durée Contrôle : <span class="font-bold"> {{ (v.duree>=60)?(v.duree%60):v.duree }} </span> <span> {{ (v.duree>=60)?'Minutes':'Secondes' }} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-l">
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Fin affichage statistique des emplacements contrôlés -->
+        <!-- <div v-if="false" class="max-h-screen overflow-auto text-sm" style="width:400px">
+            <div class="sticky bg-gray-100 p-2 border shadow-lg top-2 m-2 rounded-lg">
+                <span>Liste des emplacemens pas encore contrôlés</span>
+            </div>
+
+            <div class="m-2 py-2 border rounded-lg">
+                <div class="p-2 border rounded m-1" v-for="d in places_non_controled" :key="d.id">
+                    <div> 
+                        <span class="font-bold mx-2 border-r">{{ d.place_label }}</span>
+                        <span class="mx-2 border-r"> {{ d.regisseur_name }} </span>    
+                        <span> {{ d.annonceur_name }} </span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
     </div>
 </template>
 
@@ -83,6 +100,7 @@ export default {
             this.date_lettre = d[2]+" "+(this.mois[parseInt(d[1])-1])+" "+d[0]
             // this.recup_stat_par_jour()
             this.recup_stat_control(this.type_select_selected.code)
+            //this.recup_stat_non_control(this.type_select_selected.code)
         },
 
     },
@@ -105,6 +123,7 @@ export default {
             ],
             type_select_selected:{},
             cat_select_selected:{},
+            places_non_controled:[],
             mois:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
         }
     },
@@ -175,6 +194,7 @@ export default {
         set_select_type(i){
             this.type_select_selected = this.type_select[i]
             this.recup_stat_control(this.type_select_selected.code)
+            //this.recup_stat_non_control(this.type_select_selected.code)
         },
         match_select(d){
             if(this.cat_select_selected.code == "all"){
@@ -201,6 +221,20 @@ export default {
                 if(res.body.status){
                     self.list_length = res.body.places_stat.length
                     self.format_par_jour(res.body.places_stat)
+                }else{
+                    alert(res.body.message)
+                }
+            }, err =>{
+
+            })
+        },
+        recup_stat_non_control(type){
+            let self = this
+
+            this.$http.get('a/places/stat/'+type+'/unvisited?date_check='+this.date_select).then(res =>{
+                if(res.body.status){
+                    //self.list_length = res.body.places_stat.length
+                    self.places_non_controled = res.body.places_stat
                 }else{
                     alert(res.body.message)
                 }
