@@ -47,7 +47,7 @@
                                     <span class="font-bold"> {{ (parseInt(v.time.exit[0])+3)+"H."+v.time.exit[1]+"M."+v.time.exit[2] }}  </span>
                                 </div>
                                 <div class="">
-                                    Durée Contrôle : <span class="font-bold"> {{ (v.duree>=60)?(v.duree%60):v.duree }} </span> <span> {{ (v.duree>=60)?'Minutes':'Secondes' }} </span>
+                                    Durée Contrôle : <span class="font-bold"> {{ v.duree }} </span>
                                 </div>
                             </div>
                         </div>
@@ -175,6 +175,16 @@ export default {
                     texit = (texit[0]*60*60)+(texit[1]*60)+texit[2]
 
                     let d = texit - tenter
+
+                    if(d >= 60){
+                        if(d>= 3600){
+                            d = parseInt(d/3600)+" Heures et "+parseInt((d%60)/60)+" m et "+(d%60)+" s"
+                        }else{
+                            d = parseInt(d/60)+" Minutes et "+(d%60)+" s"
+                        }
+                    }else{
+                        d=d+" Secondes"
+                    }
 
                     tmp.duree = d
                 }
